@@ -22,9 +22,11 @@
     "stripe": "^15.4.0",
     "svix": "^1.21.0",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^0.9.0"
   },
   "devDependencies": {
+    "daisyui": "^4.10.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"
   }

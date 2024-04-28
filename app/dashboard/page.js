@@ -6,9 +6,11 @@ export default async function page() {
   return (
     <section className="py-24">
       <div className="container">
-        <h1 className="text-2xl font-semibold mb-3">Dashboard (protected)</h1>
+        <h1 className="text-2xl font-semibold mb-3">Dashboard</h1>
         <p>
-          Welcome back, {user.firstName} {user.lastName}!
+          Welcome back,{' '}
+          {user.username.slice(0, 1).toUpperCase() + user.username.slice(1)}!
+          You can see view this protected route because you are signed in.
         </p>
       </div>
     </section>

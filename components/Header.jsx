@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Header() {
   return (
@@ -23,7 +24,7 @@ export default function Header() {
               />
             </div>
           </Link>
-          <div className="dropdown">
+          <div className="dropdown ml-2">
             <div tabIndex={0} role="button" className="btn btn-ghost md:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +43,7 @@ export default function Header() {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52"
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg border rounded-box w-52"
             >
               <SignedIn>
                 <li>
@@ -50,7 +51,7 @@ export default function Header() {
                 </li>
               </SignedIn>
               <li>
-                <Link href="#">Link</Link>
+                <Link href="#">Relevant Link</Link>
               </li>
             </ul>
           </div>
@@ -66,22 +67,25 @@ export default function Header() {
               </li>
             </SignedIn>
             <li>
-              <Link href="#">Link</Link>
+              <Link href="#">Relevant Link</Link>
             </li>
           </ul>
         </div>
         {/* End desktop view */}
 
-        {/* Clerk button and profile*/}
-        <SignedOut>
-          <SignInButton>
-            <Button>Sign in</Button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-        {/* End Clerk */}
+        {/* Theme Switch and Clerk*/}
+        <div className="flex items-center space-x-4">
+          <ThemeToggle />
+          <SignedOut>
+            <SignInButton>
+              <Button variant="outline">Sign in</Button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          {/* End Clerk */}
+        </div>
       </nav>
     </header>
   );

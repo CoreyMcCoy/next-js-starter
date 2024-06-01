@@ -50,7 +50,7 @@ export default function Header() {
                 </li>
               </SignedIn>
               <li>
-                <Link href="/#">Relevant Link</Link>
+                <Link href="/#">Link</Link>
               </li>
             </ul>
           </div>
@@ -66,13 +66,13 @@ export default function Header() {
               </li>
             </SignedIn>
             <li>
-              <Link href="/#">Relevant Link</Link>
+              <Link href="/#">Link</Link>
             </li>
           </ul>
         </div>
         {/* End desktop view */}
 
-        {/* Theme Switch and Clerk*/}
+        {/* Theme switcher and Clerk button */}
         <div className="flex items-center space-x-4">
           <ThemeToggle />
           <SignedOut>
@@ -86,7 +86,7 @@ export default function Header() {
           <SignedIn>
             <UserButton />
           </SignedIn>
-          {/* End Clerk */}
+          {/* End Clerk and Theme Switcher */}
         </div>
       </nav>
     </header>

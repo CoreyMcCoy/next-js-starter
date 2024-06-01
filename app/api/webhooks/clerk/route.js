@@ -70,19 +70,22 @@ export async function POST(req) {
       // Add more fields as needed
     };
 
-    console.log(user);
+    try {
+      const newUser = await createUser(user);
 
-    const newUser = await createUser(user);
+      if (newUser) {
+        await clerkClient.users.updateUserMetadata(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
 
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser._id,
-        },
-      });
+      return NextResponse.json({ message: 'A new user was created', user: newUser });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      return NextResponse.json({ message: 'There was an error creating user', error });
     }
-
-    return NextResponse.json({ message: 'A new user created', user: newUser });
   }
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);

@@ -1,10 +1,41 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs'; // Client-side hook for accessing user information
 import Link from 'next/link';
+import { createUser } from '@/lib/actions/user.action';
 
 export default function Home() {
   const { isSignedIn, user, isLoaded } = useUser();
+  const [testUser, setTestUser] = useState({
+    clerkId: 'ckuqzjz9e0000bq6z5z1z9z9z',
+    email: 'jarvis@bot.net',
+    username: 'jarvis',
+    password: 'password',
+    role: 'admin',
+    accountType: 'lifetime',
+  });
+
+  const { clerkId, email, username, password, role, accountType } = testUser;
+
+  // Create a user in the database
+  const handleCreate = async () => {
+    console.log('Creating user...', testUser);
+    try {
+      const data = await createUser({
+        clerkId,
+        email,
+        username,
+        password,
+        role,
+        accountType,
+      });
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="text-center mb-20">
@@ -24,6 +55,14 @@ export default function Home() {
             to view the dashboard.
           </p>
         )}
+      </div>
+      <div className="text-center">
+        <button
+          onClick={handleCreate}
+          className="bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700"
+        >
+          Create User
+        </button>
       </div>
     </>
   );

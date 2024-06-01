@@ -82,7 +82,7 @@ export async function POST(req) {
       });
     }
 
-    return NextResponse.json({ message: 'New user created', user: newUser });
+    return NextResponse.json({ message: 'A new user created', user: newUser });
   }
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);

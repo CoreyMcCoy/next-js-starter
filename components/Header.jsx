@@ -1,7 +1,9 @@
+// 'use client'
+
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -13,15 +15,12 @@ export default function Header() {
         <div className="navbar-start flex">
           <Link href="/" className="font-semibold">
             <div className="hidden md:flex">
-              <span className="text-lg">SaaS Boilerplate</span>
+              <h3 className="text-xl font-bold">
+                SaaS <span className="text-pink-600">Boilerplate</span>
+              </h3>
             </div>
             <div className="md:hidden">
-              <Image
-                src="/saas-app-icon.png"
-                alt="SaaS Icon"
-                width={40}
-                height={40}
-              />
+              <Image src="/saas-app-icon.png" alt="SaaS Icon" width={40} height={40} priority />
             </div>
           </Link>
           <div className="dropdown ml-2">
@@ -51,7 +50,7 @@ export default function Header() {
                 </li>
               </SignedIn>
               <li>
-                <Link href="#">Relevant Link</Link>
+                <Link href="/#">Relevant Link</Link>
               </li>
             </ul>
           </div>
@@ -60,14 +59,14 @@ export default function Header() {
 
         {/* Desktop view */}
         <div className="navbar-end hidden md:flex">
-          <ul className="menu menu-horizontal">
+          <ul className="menu menu-horizontal space-x-2">
             <SignedIn>
               <li>
                 <Link href="/dashboard">Dashboard</Link>
               </li>
             </SignedIn>
             <li>
-              <Link href="#">Relevant Link</Link>
+              <Link href="/#">Relevant Link</Link>
             </li>
           </ul>
         </div>
@@ -80,6 +79,9 @@ export default function Header() {
             <SignInButton>
               <Button variant="outline">Sign in</Button>
             </SignInButton>
+            <SignUpButton>
+              <Button>Sign up</Button>
+            </SignUpButton>
           </SignedOut>
           <SignedIn>
             <UserButton />

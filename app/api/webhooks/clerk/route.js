@@ -1,19 +1,16 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
-import { WebhookEvent } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
 
-import { createUser } from '@/lib/actions/user.action';
+import { createUser, updateUser } from '@/lib/actions/user.action';
 import { clerkClient } from '@clerk/nextjs';
+import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    throw new Error(
-      'Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local'
-    );
+    throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
   }
 
   // Get the headers
@@ -52,14 +49,51 @@ export async function POST(req) {
     });
   }
 
+  // Do something with the payload
   // Get the ID and type
   const { id } = evt.data;
   const eventType = evt.type;
 
+  // Sync Clerk user with MongoDB
   // Create User in MongoDB
   if (eventType === 'user.created') {
-    const { id, email_addresses, image_url, first_name, last_name, username } =
-      evt.data;
+    const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+
+    const user = {
+      clerkId: id,
+      email: email_addresses[0].email_address,
+      username: username || null,
+      firstName: first_name,
+      lastName: last_name,
+      photo: image_url,
+      role: 'user',
+      accountType: 'active',
+    };
+
+    try {
+      const newUser = await createUser(user);
+      console.log('User created:', newUser);
+
+      if (newUser) {
+        await clerkClient.users.updateUserMetadata(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
+
+      return NextResponse.json({ message: 'New user created', user: newUser });
+    } catch (error) {
+      console.log('Error creating user:', error);
+      return new Response('Error occured while creating a user', {
+        status: 500,
+      });
+    }
+  }
+
+  // Update User in MongoDB
+  if (eventType === 'user.updated') {
+    const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
 
     const user = {
       clerkId: id,
@@ -70,19 +104,16 @@ export async function POST(req) {
       photo: image_url,
     };
 
-    console.log(user);
-
-    const newUser = await createUser(user);
-
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser._id,
-        },
+    try {
+      const updatedUser = await updateUser(user);
+      console.log('User updated:', updatedUser);
+      return NextResponse.json({ message: 'User updated', user: updatedUser });
+    } catch (error) {
+      console.log('Error updating user:', error);
+      return new Response('Error occured while updating a user', {
+        status: 500,
       });
     }
-
-    return NextResponse.json({ message: 'New user created', user: newUser });
   }
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);

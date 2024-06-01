@@ -1,11 +1,5 @@
 import { ThemeProvider } from '@/components/theme-provider';
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 import Header from '@/components/Header';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -22,6 +16,7 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
+        {/* Use this to use a custom font: style={{ fontFamily: 'Font Name' }} */}
         <body className={inter.className}>
           <ThemeProvider
             attribute="class"
@@ -30,7 +25,9 @@ export default function RootLayout({ children }) {
             disableTransitionOnChange
           >
             <Header />
-            <main className="min-h-screen">{children}</main>
+            <main className="min-h-screen">
+              <div className="container max-w-6xl py-24">{children}</div>
+            </main>
           </ThemeProvider>
         </body>
       </html>

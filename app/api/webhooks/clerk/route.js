@@ -79,17 +79,20 @@ export async function POST(req) {
             userId: newUser._id,
           },
         });
-      }
 
-      return NextResponse.json({ message: 'A new user was created', user: newUser });
+        const successResponse = { message: 'A new user was created', user: newUser };
+        console.log('Success Response:', successResponse);
+        return NextResponse.json(successResponse, { status: 200 });
+      } else {
+        const errorResponse = { message: 'Failed to create user' };
+        console.log('Error Response:', errorResponse);
+        return NextResponse.json(errorResponse, { status: 500 });
+      }
     } catch (error) {
       console.error('Error creating user:', error);
-      return NextResponse.json({ message: 'There was an error creating user', error });
+      const errorResponse = { message: 'There was an error creating user', error: error.message };
+      console.log('Error Response:', errorResponse);
+      return NextResponse.json(errorResponse, { status: 500 });
     }
   }
-
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log('Webhook body:', body);
-
-  return new Response('', { status: 200 });
 }

@@ -1,15 +1,15 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import Header from '@/components/Header';
 import { Inter } from 'next/font/google';
 import './globals.css';
+
+import Header from '@/components/Header';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'NextJS Starter Template',
-  description:
-    'Boilerplate for Next.js projects with Tailwind CSS, MongoDB and Clerk authentication.',
+  description: 'Next.js starter template.',
 };
 
 export default function RootLayout({ children }) {

@@ -1,10 +1,6 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
-import { WebhookEvent } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
-
-import { createUser } from '@/lib/actions/user.action';
-import { clerkClient } from '@clerk/nextjs';
+import { createUser, updateUser, deleteUser } from '@/lib/actions/user.action';
 
 export async function POST(req) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -33,7 +29,6 @@ export async function POST(req) {
 
   // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
-
   let evt;
 
   // Verify the payload with the headers
@@ -67,32 +62,63 @@ export async function POST(req) {
       photo: image_url,
       role: 'user',
       accountType: 'active',
-      // Add more fields as needed
+      // Add more fields as needed that will be added to the user object in the database. Example:
+      //    tokens: 1,
+      //    isVerified: false,
     };
 
     try {
       const newUser = await createUser(user);
+      console.log('newUser:', newUser);
 
-      if (newUser) {
-        await clerkClient.users.updateUserMetadata(id, {
-          publicMetadata: {
-            userId: newUser._id,
-          },
-        });
-
-        const successResponse = { message: 'A new user was created', user: newUser };
-        console.log('Success Response:', successResponse);
-        return NextResponse.json(successResponse, { status: 200 });
-      } else {
-        const errorResponse = { message: 'Failed to create user' };
-        console.log('Error Response:', errorResponse);
-        return NextResponse.json(errorResponse, { status: 500 });
-      }
+      return new Response('From the webhook route: User created', { status: 200 });
     } catch (error) {
       console.error('Error creating user:', error);
-      const errorResponse = { message: 'There was an error creating user', error: error.message };
-      console.log('Error Response:', errorResponse);
-      return NextResponse.json(errorResponse, { status: 500 });
+      return new Response('Error creating user', { status: 500 });
     }
   }
+
+  // Update User in MongoDB
+  if (eventType === 'user.updated') {
+    const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+
+    const user = {
+      clerkId: id,
+      email: email_addresses[0].email_address,
+      username: username || null,
+      firstName: first_name,
+      lastName: last_name,
+      photo: image_url,
+    };
+
+    try {
+      const updatedUser = await updateUser(user);
+      console.log('updatedUser:', updatedUser);
+
+      return new Response('From the webhook route: User updated', { status: 200 });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      return new Response('Error updating user', { status: 500 });
+    }
+  }
+
+  // Delete User in MongoDB
+  if (eventType === 'user.deleted') {
+    const { id } = evt.data;
+
+    try {
+      const deletedUser = await deleteUser(id);
+      console.log('deletedUser:', deletedUser);
+
+      return new Response('From the webhook route: User deleted', { status: 200 });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return new Response('Error deleting user', { status: 500 });
+    }
+  }
+
+  // If the event type is not user.created, user.updated, or user.deleted
+  return new Response('From the webhook route: Event type not recognized - but handled', {
+    status: 200,
+  });
 }

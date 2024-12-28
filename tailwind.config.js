@@ -74,4 +74,9 @@ module.exports = {
     },
   },
   plugins: [require('@tailwindcss/typography'), require('tailwindcss-animate'), require('daisyui')],
+
+  // Add daisyUI themes
+  daisyui: {
+    themes: ['light', 'dark', 'cupcake', 'lofi', 'lemonade', 'nord', 'retro', 'valentine'],
+  },
 };

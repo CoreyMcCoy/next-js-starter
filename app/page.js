@@ -10,12 +10,14 @@ export default function Home() {
     <>
       <div className="text-center mb-20">
         <h1 className="text-2xl font-semibold mb-3">
-          Create engaging marketing copy for your business.
+          NextJS, Clerk, MongoDB, and Stripe App Template
         </h1>
         {isSignedIn && isLoaded ? (
           <>
             <p>Welcome back, {user.username.slice(0, 1).toUpperCase() + user.username.slice(1)}!</p>
-            <p className="mt-3">This tool helps you create marketing copy for your business.</p>
+            <p className="mt-3">
+              This is a fullstack app template that uses: Next.js, Clerk, MongoDB, and Stripe.
+            </p>
           </>
         ) : (
           <p>

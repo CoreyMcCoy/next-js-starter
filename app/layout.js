@@ -1,23 +1,18 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-import { Inter } from 'next/font/google';
+import Header from '@/components/Header';
 import './globals.css';
 
-import Header from '@/components/Header';
-
-const inter = Inter({ subsets: ['latin'] });
-
 export const metadata = {
-  title: 'NextJS Starter Template',
-  description: 'Next.js starter template.',
+  title: 'Marketing Copy Generator',
+  description: 'Generate marketing copy for your business in seconds.',
 };
 
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        {/* Use this to use a custom font: style={{ fontFamily: 'Font Name' }} */}
-        <body className={inter.className}>
+        <body style={{ fontFamily: 'Overused Grotesk' }}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

@@ -15,9 +15,7 @@ export default function Header() {
         <div className="navbar-start flex">
           <Link href="/" className="font-semibold">
             <div className="hidden md:flex">
-              <h3 className="text-xl font-bold">
-                SaaS <span className="text-pink-600">Boilerplate</span>
-              </h3>
+              <h3 className="text-lg font-bold">Marketing Copy Generator</h3>
             </div>
             <div className="md:hidden">
               <Image src="/saas-app-icon.png" alt="SaaS Icon" width={40} height={40} priority />
